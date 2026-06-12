@@ -1,0 +1,27 @@
+import { motion } from 'framer-motion'
+import Experience from '../components/Experience'
+
+const pageVariants = {
+  initial: { opacity: 0, y: 20 },
+  enter: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
+}
+
+export default function ExperiencePage() {
+  return (
+    <motion.div variants={pageVariants} initial="initial" animate="enter" exit="exit">
+      <div className="pt-24">
+        <div className="max-w-4xl mx-auto px-6 pt-12 pb-4 text-center">
+          <p className="section-label mb-4">experience.json</p>
+          <h1 className="font-sans font-bold text-5xl lg:text-6xl text-white">
+            My <span className="gradient-text">Journey</span>
+          </h1>
+          <p className="text-text-secondary mt-4 max-w-xl mx-auto text-lg">
+            From classroom theory to real-world engineering — every step of the path.
+          </p>
+        </div>
+        <Experience />
+      </div>
+    </motion.div>
+  )
+}
