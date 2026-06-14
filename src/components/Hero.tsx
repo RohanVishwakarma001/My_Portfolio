@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Github, Linkedin, Mail, ChevronRight } from "lucide-react";
+import { ArrowDown, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { socialLinks } from "../constants";
 
 const titles = [
   "Full Stack Developer",
@@ -142,20 +143,6 @@ function ParticleField() {
     />
   );
 }
-
-const socialLinks = [
-  {
-    icon: Github,
-    href: "https://github.com/RohanVishwakarma001",
-    label: "GitHub",
-  },
-  {
-    icon: Linkedin,
-    href: "https://linkedin.com/in/rohan-vishwakarma",
-    label: "LinkedIn",
-  },
-  { icon: Mail, href: "mailto:rohanvishwakarma8261@gmail.com", label: "Email" },
-];
 
 export default function Hero() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });

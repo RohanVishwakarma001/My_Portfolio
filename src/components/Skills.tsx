@@ -1,71 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-
-const skillCategories = [
-  {
-    label: 'Languages',
-    icon: '{ }',
-    color: 'cyan',
-    skills: [
-      { name: 'JavaScript (ES6+)', level: 90 },
-      { name: 'TypeScript', level: 82 },
-      { name: 'Java', level: 70 },
-      { name: 'C', level: 65 },
-      { name: 'HTML5 / CSS3', level: 95 },
-      { name: 'SQL', level: 75 },
-    ],
-  },
-  {
-    label: 'Frontend & UI',
-    icon: '⬡',
-    color: 'purple',
-    skills: [
-      { name: 'React.js', level: 90 },
-      { name: 'Next.js 14', level: 85 },
-      { name: 'Tailwind CSS', level: 92 },
-      { name: 'Framer Motion', level: 78 },
-      { name: 'SASS', level: 72 },
-      { name: 'Responsive Design', level: 90 },
-    ],
-  },
-  {
-    label: 'Backend & DBs',
-    icon: '⊞',
-    color: 'blue',
-    skills: [
-      { name: 'Node.js', level: 80 },
-      { name: 'Express.js', level: 78 },
-      { name: 'MongoDB', level: 72 },
-      { name: 'Appwrite', level: 75 },
-      { name: 'Convex', level: 70 },
-      { name: 'RESTful APIs', level: 85 },
-    ],
-  },
-  {
-    label: 'Testing & QA',
-    icon: '✓',
-    color: 'green',
-    skills: [
-      { name: 'Jest', level: 80 },
-      { name: 'Mocha / Chai', level: 78 },
-      { name: 'Selenium', level: 65 },
-      { name: 'Unit Testing', level: 82 },
-      { name: 'CI/CD Pipelines', level: 72 },
-    ],
-  },
-  {
-    label: 'Tools & Cloud',
-    icon: '◈',
-    color: 'cyan',
-    skills: [
-      { name: 'Git / GitHub', level: 88 },
-      { name: 'Vercel', level: 85 },
-      { name: 'Plaid API', level: 72 },
-      { name: 'Dwolla API', level: 68 },
-      { name: 'Agile / Scrum', level: 80 },
-    ],
-  },
-]
+import { skillCategories, techIcons } from '../constants'
+import type { SkillCategory } from '../constants'
 
 const colorMap: Record<string, { text: string; bar: string; border: string; label: string; glow: string }> = {
   cyan: {
@@ -110,7 +46,7 @@ function SkillBar({ name, color }: { name: string; level: number; color: string;
   )
 }
 
-function CategoryCard({ cat, index }: { cat: typeof skillCategories[0]; index: number }) {
+function CategoryCard({ cat, index }: { cat: SkillCategory; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-60px' })
   const c = colorMap[cat.color]
@@ -146,11 +82,6 @@ function CategoryCard({ cat, index }: { cat: typeof skillCategories[0]; index: n
     </motion.div>
   )
 }
-
-const techIcons = [
-  'React', 'Next.js', 'TypeScript', 'Node.js', 'Tailwind',
-  'MongoDB', 'Vercel', 'Git', 'Framer', 'Jest',
-]
 
 export default function Skills() {
   const ref = useRef<HTMLElement>(null)

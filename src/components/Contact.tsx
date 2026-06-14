@@ -1,37 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Send, Github, Linkedin, Mail, Phone, MapPin, CheckCircle, AlertCircle } from 'lucide-react'
-
-const contactLinks = [
-  {
-    icon: Github,
-    label: 'GitHub',
-    value: 'github.com/RohanVishwakarma001',
-    href: 'https://github.com/RohanVishwakarma001',
-    color: 'cyan',
-  },
-  {
-    icon: Linkedin,
-    label: 'LinkedIn',
-    value: 'linkedin.com/in/rohan-vishwakarma',
-    href: 'https://linkedin.com/in/rohan-vishwakarma',
-    color: 'blue',
-  },
-  {
-    icon: Mail,
-    label: 'Email',
-    value: 'rohanvishwakarma8261@gmail.com',
-    href: 'mailto:rohanvishwakarma8261@gmail.com',
-    color: 'purple',
-  },
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: '+91 8317055505',
-    href: 'tel:+918317055505',
-    color: 'green',
-  },
-]
+import { Send, MapPin, CheckCircle, AlertCircle } from 'lucide-react'
+import { contactLinks } from '../constants'
 
 const colorMap: Record<string, { text: string; border: string; bg: string }> = {
   cyan: { text: 'text-neon-cyan', border: 'border-neon-cyan/20', bg: 'bg-neon-cyan/5' },

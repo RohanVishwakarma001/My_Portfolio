@@ -1,19 +1,6 @@
 import { Link } from 'react-router-dom'
-import { Github, Linkedin, Mail, Terminal, Heart } from 'lucide-react'
-
-const links = [
-  { path: '/', label: 'Home' },
-  { path: '/projects', label: 'Projects' },
-  { path: '/experience', label: 'Experience' },
-  { path: '/skills', label: 'Skills' },
-  { path: '/contact', label: 'Contact' },
-]
-
-const socials = [
-  { icon: Github, href: 'https://github.com/RohanVishwakarma001', label: 'GitHub' },
-  { icon: Linkedin, href: 'https://linkedin.com/in/rohan-vishwakarma', label: 'LinkedIn' },
-  { icon: Mail, href: 'mailto:rohanvishwakarma8261@gmail.com', label: 'Email' },
-]
+import { Terminal, Heart } from 'lucide-react'
+import { navLinks, socialLinks } from '../constants'
 
 export default function Footer() {
   return (
@@ -39,7 +26,7 @@ export default function Footer() {
           <div>
             <p className="font-mono text-xs text-neon-cyan tracking-widest mb-4">NAVIGATION</p>
             <div className="grid grid-cols-2 gap-2">
-              {links.map((link) => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
@@ -71,7 +58,7 @@ export default function Footer() {
             </div>
 
             <div className="flex items-center gap-3 mt-5">
-              {socials.map(({ icon: Icon, href, label }) => (
+              {socialLinks.map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}
                   href={href}

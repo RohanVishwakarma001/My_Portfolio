@@ -2,14 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Terminal } from 'lucide-react'
-
-const navLinks = [
-  { path: '/', label: 'Home' },
-  { path: '/projects', label: 'Projects' },
-  { path: '/experience', label: 'Experience' },
-  { path: '/skills', label: 'Skills' },
-  { path: '/contact', label: 'Contact' },
-]
+import { navLinks } from '../constants'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)

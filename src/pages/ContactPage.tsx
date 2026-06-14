@@ -1,15 +1,10 @@
 import { motion } from 'framer-motion'
 import Contact from '../components/Contact'
-
-const pageVariants = {
-  initial: { opacity: 0, y: 20 },
-  enter: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
-}
+import { slideVariants } from '../constants'
 
 export default function ContactPage() {
   return (
-    <motion.div variants={pageVariants} initial="initial" animate="enter" exit="exit">
+    <motion.div variants={slideVariants} initial="initial" animate="enter" exit="exit">
       <div className="pt-24">
         <div className="max-w-4xl mx-auto px-6 pt-12 pb-4 text-center">
           <p className="section-label mb-4">contact.ts</p>

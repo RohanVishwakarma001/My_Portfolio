@@ -1,44 +1,8 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Briefcase, Calendar, MapPin, CheckCircle2 } from 'lucide-react'
-
-const experiences = [
-  {
-    company: 'Unified Mentor',
-    role: 'Web Development Intern',
-    location: 'Gurugram, Haryana',
-    period: 'June 2024 – July 2024',
-    type: 'Internship',
-    color: 'cyan',
-    tech: ['Jest', 'Mocha', 'JavaScript', 'TypeScript', 'CI/CD', 'ReactJS', 'HTML', 'CSS'],
-    achievements: [
-      'Developed an automated unit testing service using Jest and Mocha that reduced manual testing time and enhanced bug tracking by running daily tests on in-development products.',
-      'Built and maintained CI/CD pipelines using JavaScript and TypeScript for automated test result organization and build deployment, improving overall software QA.',
-      'Implemented an end-to-end automated workflow that loads latest build artifacts, executes test suites, and generates structured reports to streamline Continuous Integration processes.',
-      'Designed and delivered interactive test result dashboards using ReactJS, HTML, JavaScript, and CSS, enabling swift visualization of test outcomes and accelerating bug resolution.',
-      'Collaborated within a cross-functional Agile team, contributing to sprint planning and continuous feature delivery.',
-    ],
-  },
-]
-
-const education = [
-  {
-    institution: 'J.B. Institute of Technology',
-    degree: 'Bachelor of Science in Computer Science',
-    location: 'Dehradun, Uttarakhand',
-    period: 'August 2023 – August 2027',
-    type: 'Education',
-    color: 'purple',
-    courses: [
-      'Data Structures',
-      'Algorithms Analysis',
-      'Database Management',
-      'Software Methodology',
-      'Artificial Intelligence',
-      'Internet Technology',
-    ],
-  },
-]
+import { experiences, education } from '../constants'
+import type { ExperienceItem, EducationItem } from '../constants'
 
 const colorMap: Record<string, { text: string; border: string; bg: string; dot: string }> = {
   cyan: {
@@ -60,7 +24,7 @@ function TimelineItem({
   index,
   isExp,
 }: {
-  item: typeof experiences[0] | typeof education[0]
+  item: ExperienceItem | EducationItem
   index: number
   isExp: boolean
 }) {

@@ -1,48 +1,8 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import {
-  Briefcase,
-  Rocket,
-  Palette,
-  Lightbulb,
-  MapPin,
-  GraduationCap,
-} from "lucide-react";
-
-const highlights = [
-  {
-    icon: Briefcase,
-    title: "Internship @ Unified Mentor",
-    desc: "Web Development Intern (2024)",
-    color: "cyan",
-  },
-  {
-    icon: Rocket,
-    title: "Production-Grade Apps",
-    desc: "Full-stack with Next.js & Node.js",
-    color: "purple",
-  },
-  {
-    icon: Palette,
-    title: "Cinematic UI/UX",
-    desc: "Obsessed with premium design systems",
-    color: "blue",
-  },
-  {
-    icon: Lightbulb,
-    title: "Freelance → Agency",
-    desc: "Exploring the indie-tech model",
-    color: "green",
-  },
-];
-
-const stats = [
-  { value: "3+", label: "Production Projects" },
-  { value: "1", label: "Internship" },
-  { value: "5+", label: "Technologies" },
-  { value: "2027", label: "Graduation Year" },
-];
+import { MapPin, GraduationCap } from "lucide-react";
+import { highlights, stats } from "../constants";
 
 const colorMap: Record<string, string> = {
   cyan: "text-neon-cyan border-neon-cyan/20 bg-neon-cyan/5",

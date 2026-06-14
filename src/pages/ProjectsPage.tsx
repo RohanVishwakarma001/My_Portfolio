@@ -7,126 +7,19 @@ import {
   Calendar,
   CheckCircle2,
 } from "lucide-react";
-
-const projects = [
-  {
-    id: "podcastr",
-    title: "Podcastr",
-    tagline: "AI-Powered Podcast Platform",
-    description:
-      "Engineered an AI-powered podcast platform enabling creators to generate diverse voiceovers from a single text input using text-to-speech and multi-voice synthesis technology.",
-    period: "May 2024",
-    gradient: "from-neon-cyan via-neon-blue to-neon-purple",
-    border: "border-neon-cyan/20 hover:border-neon-cyan/50",
-    accentColor: "#00d9ff",
-    tech: [
-      "Next.js 14",
-      "TypeScript",
-      "Tailwind CSS",
-      "Convex",
-      "Framer Motion",
-      "OpenAI TTS",
-    ],
-    features: [
-      "AI-powered text-to-speech with multi-voice synthesis technology",
-      "Server-side rendering via Next.js 14 for optimal SEO and performance",
-      "Real-time backend data management with Convex",
-      "Framer Motion animations for seamless, polished UX",
-      "Intuitive creator dashboard with voice selection and preview",
-      "Scalable SaaS architecture with responsive design",
-    ],
-    impact:
-      "Streamlined podcast creation workflow, reducing production time from hours to minutes",
-    github: "https://github.com/RohanVishwakarma001",
-    live: "#",
-    category: "AI / SaaS",
-  },
-  {
-    id: "Downtime.so",
-    title: "Downtime.so",
-    tagline: "Real-Time status page platform",
-    description:
-      "A self-hosted, open-source status page platform. Create public status pages, manage incidents, send email/SMS notifications, and receive alerts from monitoring tools like UptimeRobot and Datadog.",
-    period: "June 2026",
-    gradient: "from-neon-purple via-neon-blue to-neon-cyan",
-    border: "border-neon-purple/20 hover:border-neon-purple/50",
-    accentColor: "#b300ff",
-    tech: [
-      "Next.js 14",
-      "TypeScript",
-      "Tailwind CSS",
-      "TanStack",
-      "Query",
-      "Framer",
-      "Motion",
-      "Express.js",
-      "Prisma ORM",
-    ],
-    features: [
-      "Public status pages — shareable at `/status/:orgSlug`",
-      "Incident management — create, update, and resolve incidents with timeline updates",
-      "Email & SMS notifications — notify subscribers when incidents occur or update",
-      "Webhook ingestion — UptimeRobot, Datadog, and generic webhooks",
-      "REST API — manage services and incidents programmatically via API key",
-      "Real-time updates — SSE-powered live status pages (no polling)",
-      "Multi-tenant — each organization is fully isolated",
-    ],
-    impact:
-      "Built a free, self-hostable alternative to Statuspage.io, which costs $29–$1,499/month — saving teams that recurring cost.",
-    github: "https://github.com/RohanVishwakarma001/Downtime.so",
-    live: "https://downtime.so.rohanvishwakarma.co.in/",
-    category: "Collaboration",
-  },
-  {
-    id: "horizon",
-    title: "Horizon",
-    tagline: "Full-Stack Banking Platform",
-    description:
-      "Built a full-stack online banking platform enabling users to securely connect multiple financial accounts, monitor real-time transactions, and execute peer-to-peer transfers.",
-    period: "July 2024",
-    gradient: "from-neon-blue via-neon-cyan to-neon-green",
-    border: "border-neon-blue/20 hover:border-neon-blue/50",
-    accentColor: "#0080ff",
-    tech: [
-      "Next.js 14",
-      "TypeScript",
-      "Appwrite",
-      "Dwolla",
-      "Plaid",
-      "JWT",
-      "Prisma",
-    ],
-    features: [
-      "Plaid API integration for secure multi-bank account linking",
-      "Dwolla ACH payment processing for peer-to-peer transfers",
-      "JWT authentication with encrypted data transmission",
-      "Real-time transaction monitoring and financial dashboard",
-      "Responsive, accessible fintech UI meeting WCAG standards",
-      "Appwrite backend with secure database management",
-    ],
-    impact:
-      "Created a fintech-grade banking application with enterprise security standards",
-    github: "https://github.com/RohanVishwakarma001",
-    live: "#",
-    category: "FinTech",
-  },
-];
-
-const pageVariants = {
-  initial: { opacity: 0, y: 20 },
-  enter: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
-};
+import { projects, accentTokens, slideVariants } from "../constants";
+import type { Project } from "../constants";
 
 function ProjectDetailCard({
   project,
   index,
 }: {
-  project: (typeof projects)[0];
+  project: Project;
   index: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const accent = accentTokens[project.color];
 
   return (
     <motion.div
@@ -134,10 +27,10 @@ function ProjectDetailCard({
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.12 }}
-      className={`glass rounded-2xl border ${project.border} overflow-hidden transition-all duration-400 group`}
+      className={`glass rounded-2xl border ${accent.border} overflow-hidden transition-all duration-400 group`}
     >
       {/* Gradient header band */}
-      <div className={`h-1.5 bg-gradient-to-r ${project.gradient}`} />
+      <div className={`h-1.5 bg-gradient-to-r ${accent.gradientVivid}`} />
 
       <div className="p-8">
         {/* Project header */}
@@ -147,9 +40,9 @@ function ProjectDetailCard({
               <span
                 className="font-mono text-xs px-3 py-1 rounded-full border"
                 style={{
-                  color: project.accentColor,
-                  borderColor: `${project.accentColor}30`,
-                  background: `${project.accentColor}10`,
+                  color: accent.hex,
+                  borderColor: `${accent.hex}30`,
+                  background: `${accent.hex}10`,
                 }}
               >
                 {project.category}
@@ -164,7 +57,7 @@ function ProjectDetailCard({
             </h2>
             <p
               className="font-mono text-sm mt-1"
-              style={{ color: project.accentColor }}
+              style={{ color: accent.hex }}
             >
               {project.tagline}
             </p>
@@ -183,7 +76,7 @@ function ProjectDetailCard({
               href={project.live}
               className="flex items-center gap-2 px-4 py-2 rounded-lg font-mono text-xs text-bg-primary font-semibold transition-all duration-200"
               style={{
-                background: `linear-gradient(135deg, ${project.accentColor}, #0080ff)`,
+                background: `linear-gradient(135deg, ${accent.hex}, #0080ff)`,
               }}
             >
               <ExternalLink size={14} /> Live Demo
@@ -208,7 +101,7 @@ function ProjectDetailCard({
                   <CheckCircle2
                     size={14}
                     className="mt-0.5 flex-shrink-0"
-                    style={{ color: project.accentColor }}
+                    style={{ color: accent.hex }}
                   />
                   <span className="text-text-secondary text-sm leading-relaxed">
                     {f}
@@ -224,7 +117,7 @@ function ProjectDetailCard({
                 <Zap
                   size={14}
                   className="mt-0.5"
-                  style={{ color: project.accentColor }}
+                  style={{ color: accent.hex }}
                 />
                 <p className="font-mono text-xs text-text-muted tracking-widest">
                   IMPACT
@@ -245,9 +138,9 @@ function ProjectDetailCard({
                     key={t}
                     className="px-2.5 py-1 rounded text-xs font-mono border transition-all duration-200"
                     style={{
-                      color: project.accentColor,
-                      borderColor: `${project.accentColor}25`,
-                      background: `${project.accentColor}08`,
+                      color: accent.hex,
+                      borderColor: `${accent.hex}25`,
+                      background: `${accent.hex}08`,
                     }}
                   >
                     {t}
@@ -268,7 +161,7 @@ export default function ProjectsPage() {
 
   return (
     <motion.div
-      variants={pageVariants}
+      variants={slideVariants}
       initial="initial"
       animate="enter"
       exit="exit"
