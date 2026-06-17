@@ -75,7 +75,7 @@ export const projects: Project[] = [
       "Engineered a full-stack workflow automation platform that lets users visually build, deploy, and monitor event-driven pipelines on a drag-and-drop canvas — chaining webhook triggers, HTTP requests, conditional logic, and actions with live execution tracking.",
     period: "June 2026",
     category: "DevTools / SaaS",
-    color: "purple",
+    color: "cyan",
     tech: [
       "Next.js 14",
       "TypeScript",
