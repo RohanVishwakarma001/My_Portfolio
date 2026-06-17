@@ -261,7 +261,8 @@ export default function Hero() {
             </Link>
 
             <a
-              href="/resume.pdf"
+              href="/My_Resume.pdf"
+              download="Rohan_Vishwakarma_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-neon rounded-lg text-sm"

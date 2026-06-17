@@ -1,7 +1,12 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
+import emailjs from '@emailjs/browser'
 import { Send, MapPin, CheckCircle, AlertCircle } from 'lucide-react'
 import { contactLinks } from '../constants'
+
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
 const colorMap: Record<string, { text: string; border: string; bg: string }> = {
   cyan: { text: 'text-neon-cyan', border: 'border-neon-cyan/20', bg: 'bg-neon-cyan/5' },
@@ -14,6 +19,7 @@ type FormStatus = 'idle' | 'sending' | 'success' | 'error'
 
 export default function Contact() {
   const ref = useRef<HTMLElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
@@ -37,13 +43,31 @@ export default function Contact() {
       return
     }
     setErrors({})
+
+    if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY || !formRef.current) {
+      console.error('EmailJS is not configured. Set the VITE_EMAILJS_* env vars.')
+      setStatus('error')
+      setTimeout(() => setStatus('idle'), 5000)
+      return
+    }
+
     setStatus('sending')
 
-    // Simulate send (replace with EmailJS or backend call)
-    await new Promise((r) => setTimeout(r, 1600))
-    setStatus('success')
-    setForm({ name: '', email: '', subject: '', message: '' })
-    setTimeout(() => setStatus('idle'), 5000)
+    try {
+      await emailjs.sendForm(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        { publicKey: EMAILJS_PUBLIC_KEY },
+      )
+      setStatus('success')
+      setForm({ name: '', email: '', subject: '', message: '' })
+    } catch (err) {
+      console.error('Failed to send message:', err)
+      setStatus('error')
+    } finally {
+      setTimeout(() => setStatus('idle'), 5000)
+    }
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -127,7 +151,7 @@ export default function Contact() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <form onSubmit={handleSubmit} className="glass rounded-2xl border border-white/10 p-6 lg:p-8">
+            <form ref={formRef} onSubmit={handleSubmit} className="glass rounded-2xl border border-white/10 p-6 lg:p-8">
               <div className="grid sm:grid-cols-2 gap-4 mb-4">
                 {/* Name */}
                 <div>
