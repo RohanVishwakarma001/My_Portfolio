@@ -16,7 +16,7 @@ export const socialLinks: SocialLink[] = [
   },
   {
     icon: Linkedin,
-    href: "https://www.linkedin.com/in/rohan-vishwakarma-18507a293/?skipRedirect=true",
+    href: "https://www.linkedin.com/in/rohan-vishwakarma-18507a293/",
     label: "LinkedIn",
   },
   { icon: Mail, href: "mailto:rohanvishwakarma8261@gmail.com", label: "Email" },
@@ -40,7 +40,7 @@ export const contactLinks: ContactLink[] = [
     icon: Linkedin,
     label: "LinkedIn",
     value: "linkedin.com/in/rohan-vishwakarma",
-    href: "https://linkedin.com/in/rohan-vishwakarma",
+    href: "https://www.linkedin.com/in/rohan-vishwakarma-18507a293/",
     color: "blue",
   },
   {

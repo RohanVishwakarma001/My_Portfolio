@@ -45,7 +45,7 @@ export const skillCategories: SkillCategory[] = [
       { name: 'Node.js', level: 80 },
       { name: 'Express.js', level: 78 },
       { name: 'MongoDB', level: 72 },
-      { name: 'Appwrite', level: 75 },
+      { name: 'PostgreSQL', level: 75 },
       { name: 'Convex', level: 70 },
       { name: 'RESTful APIs', level: 85 },
     ],
