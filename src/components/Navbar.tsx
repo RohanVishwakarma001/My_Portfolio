@@ -60,12 +60,12 @@ export default function Navbar() {
 
           {/* CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <a
-              href="mailto:rohanvishwakarma8261@gmail.com"
+            <Link
+              to="/contact"
               className="btn-neon text-xs rounded"
             >
               Hire Me
-            </a>
+            </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -108,12 +108,12 @@ export default function Navbar() {
               ))}
             </div>
             <div className="mt-10">
-              <a
-                href="mailto:rohanvishwakarma8261@gmail.com"
+              <Link
+                to="/contact"
                 className="btn-neon w-full justify-center rounded"
               >
                 Hire Me
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}
