@@ -1,6 +1,7 @@
 export * from './animations'
 export * from './navigation'
 export * from './projects'
+export * from './certificates'
 export * from './skills'
 export * from './experience'
 export * from './about'

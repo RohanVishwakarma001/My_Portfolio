@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import ProjectsPage from './pages/ProjectsPage'
 import ExperiencePage from './pages/ExperiencePage'
 import SkillsPage from './pages/SkillsPage'
+import CertificatesPage from './pages/CertificatesPage'
 import ContactPage from './pages/ContactPage'
 
 function AnimatedRoutes() {
@@ -18,6 +19,7 @@ function AnimatedRoutes() {
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/experience" element={<ExperiencePage />} />
         <Route path="/skills" element={<SkillsPage />} />
+        <Route path="/certificates" element={<CertificatesPage />} />
         <Route path="/contact" element={<ContactPage />} />
       </Routes>
     </AnimatePresence>
