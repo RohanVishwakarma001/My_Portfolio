@@ -3,11 +3,14 @@ import { motion, useInView } from 'framer-motion'
 import { ExternalLink, Award } from 'lucide-react'
 import { certificates, accentTokens } from '../constants'
 import type { Certificate } from '../constants'
+import { useTilt } from '../hooks/useTilt'
+import TechIcon from './TechIcon'
 
 function CertificateCard({ certificate, index }: { certificate: Certificate; index: number }) {
   const ref = useRef<HTMLAnchorElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
   const accent = accentTokens[certificate.color]
+  const tilt = useTilt()
 
   return (
     <motion.a
@@ -18,8 +21,14 @@ function CertificateCard({ certificate, index }: { certificate: Certificate; ind
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.12, ease: [0.175, 0.885, 0.32, 1.275] }}
-      className={`group block glass rounded-2xl border ${accent.border} transition-all duration-400 overflow-hidden hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]`}
+      className={`group relative block glass rounded-2xl border ${accent.border} transition-all duration-400 overflow-hidden hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]`}
+      {...tilt.bind}
     >
+      <motion.div
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+        style={{ backgroundImage: tilt.spotlightBackground }}
+      />
+
       {/* Card header gradient */}
       <div className={`h-2 bg-gradient-to-r ${accent.gradientSoft} opacity-60`} />
 
@@ -65,6 +74,7 @@ function CertificateCard({ certificate, index }: { certificate: Certificate; ind
                   : {}
               }
             >
+              <TechIcon name={s} />
               {s}
             </span>
           ))}

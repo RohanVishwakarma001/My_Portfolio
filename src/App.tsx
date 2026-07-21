@@ -1,13 +1,18 @@
+import { Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import ScrollProgress from './components/ScrollProgress'
+import CustomCursor from './components/CustomCursor'
+import PageLoader from './components/PageLoader'
 import Home from './pages/Home'
-import ProjectsPage from './pages/ProjectsPage'
-import ExperiencePage from './pages/ExperiencePage'
-import SkillsPage from './pages/SkillsPage'
-import CertificatesPage from './pages/CertificatesPage'
-import ContactPage from './pages/ContactPage'
+
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage'))
+const ExperiencePage = lazy(() => import('./pages/ExperiencePage'))
+const SkillsPage = lazy(() => import('./pages/SkillsPage'))
+const CertificatesPage = lazy(() => import('./pages/CertificatesPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
 
 function AnimatedRoutes() {
   const location = useLocation()
@@ -30,9 +35,13 @@ export default function App() {
   return (
     <Router>
       <div className="min-h-screen bg-bg-primary text-white">
+        <ScrollProgress />
+        <CustomCursor />
         <Navbar />
         <main>
-          <AnimatedRoutes />
+          <Suspense fallback={<PageLoader />}>
+            <AnimatedRoutes />
+          </Suspense>
         </main>
         <Footer />
       </div>

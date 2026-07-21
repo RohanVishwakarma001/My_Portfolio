@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -194,22 +192,6 @@ body {
   opacity: 1;
 }
 
-/* Skill bar animation */
-.skill-bar {
-  position: relative;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.skill-bar-fill {
-  height: 100%;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
-  transform-origin: left;
-}
-
 /* Timeline connector */
 .timeline-line {
   background: linear-gradient(to bottom, var(--neon-cyan), var(--neon-purple));
@@ -345,6 +327,7 @@ textarea:focus {
 .tech-badge {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   padding: 4px 10px;
   background: rgba(0, 217, 255, 0.08);
   border: 1px solid rgba(0, 217, 255, 0.2);
@@ -400,4 +383,44 @@ textarea:focus {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Custom cursor: hide the native cursor only once JS has confirmed a fine
+   pointer is present, so touch/keyboard users and no-JS visitors are unaffected. */
+.custom-cursor-active,
+.custom-cursor-active * {
+  cursor: none !important;
+}
+
+/* Infinite marquee strip (used for the tech pill row) */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  animation: marquee 28s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Respect the user's motion preference: strip transitions/animations down to
+   near-instant so nothing keeps moving once assistive settings ask it not to. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .gradient-bg,
+  .gradient-text,
+  .marquee-track {
+    animation: none !important;
+  }
 }

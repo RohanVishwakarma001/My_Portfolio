@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion'
 import { Briefcase, Calendar, MapPin, CheckCircle2 } from 'lucide-react'
 import { experiences, education } from '../constants'
 import type { ExperienceItem, EducationItem } from '../constants'
+import TechIcon from './TechIcon'
 
 const colorMap: Record<string, { text: string; border: string; bg: string; dot: string }> = {
   cyan: {
@@ -103,7 +104,7 @@ function TimelineItem({
             <p className="text-text-muted font-mono text-xs mb-3">TECH STACK</p>
             <div className="flex flex-wrap gap-2">
               {item.tech.map((t) => (
-                <span key={t} className="tech-badge">{t}</span>
+                <span key={t} className="tech-badge"><TechIcon name={t} />{t}</span>
               ))}
             </div>
           </div>

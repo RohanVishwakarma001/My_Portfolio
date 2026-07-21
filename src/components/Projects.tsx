@@ -3,12 +3,15 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { ExternalLink, Github, ChevronDown, ChevronUp, Zap } from 'lucide-react'
 import { projects, accentTokens } from '../constants'
 import type { Project } from '../constants'
+import { useTilt } from '../hooks/useTilt'
+import TechIcon from './TechIcon'
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [expanded, setExpanded] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
   const accent = accentTokens[project.color]
+  const tilt = useTilt()
 
   return (
     <motion.div
@@ -16,8 +19,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       initial={{ opacity: 0, y: 50 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.15, ease: [0.175, 0.885, 0.32, 1.275] }}
-      className={`glass rounded-2xl border ${accent.border} transition-all duration-400 overflow-hidden hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]`}
+      className={`group relative glass rounded-2xl border ${accent.border} transition-all duration-400 overflow-hidden hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]`}
+      {...tilt.bind}
     >
+      <motion.div
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+        style={{ backgroundImage: tilt.spotlightBackground }}
+      />
+
       {/* Card header gradient */}
       <div className={`h-2 bg-gradient-to-r ${accent.gradientSoft} opacity-60`} />
 
@@ -72,6 +81,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                   : {}
               }
             >
+              <TechIcon name={t} />
               {t}
             </span>
           ))}

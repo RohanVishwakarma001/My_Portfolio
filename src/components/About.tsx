@@ -3,6 +3,44 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { MapPin, GraduationCap } from "lucide-react";
 import { highlights, stats } from "../constants";
+import { useTilt } from "../hooks/useTilt";
+
+function HighlightCard({
+  item,
+  index,
+  isInView,
+}: {
+  item: (typeof highlights)[number];
+  index: number;
+  isInView: boolean;
+}) {
+  const Icon = item.icon;
+  const tilt = useTilt(5);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={isInView ? { opacity: 1, scale: 1 } : {}}
+      transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+      className={`group relative glass rounded-xl p-5 border hover:border-opacity-50 transition-all duration-300 cursor-default overflow-hidden ${colorMap[item.color]}`}
+      {...tilt.bind}
+    >
+      <motion.div
+        className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{ backgroundImage: tilt.spotlightBackground }}
+      />
+      <div
+        className={`relative w-10 h-10 rounded-lg flex items-center justify-center mb-4 ${colorMap[item.color]} border`}
+      >
+        <Icon size={20} />
+      </div>
+      <h3 className="relative font-sans font-semibold text-white text-sm mb-1 leading-snug">
+        {item.title}
+      </h3>
+      <p className="relative text-text-muted text-xs font-mono">{item.desc}</p>
+    </motion.div>
+  );
+}
 
 const colorMap: Record<string, string> = {
   cyan: "text-neon-cyan border-neon-cyan/20 bg-neon-cyan/5",
@@ -113,30 +151,9 @@ export default function About() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="grid grid-cols-2 gap-4"
           >
-            {highlights.map((item, i) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
-                  className={`glass rounded-xl p-5 border hover:border-opacity-50 transition-all duration-300 group cursor-default ${colorMap[item.color]}`}
-                >
-                  <div
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center mb-4 ${colorMap[item.color]} border`}
-                  >
-                    <Icon size={20} />
-                  </div>
-                  <h3 className="font-sans font-semibold text-white text-sm mb-1 leading-snug">
-                    {item.title}
-                  </h3>
-                  <p className="text-text-muted text-xs font-mono">
-                    {item.desc}
-                  </p>
-                </motion.div>
-              );
-            })}
+            {highlights.map((item, i) => (
+              <HighlightCard key={item.title} item={item} index={i} isInView={isInView} />
+            ))}
           </motion.div>
         </div>
       </div>

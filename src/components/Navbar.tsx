@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Terminal } from 'lucide-react'
 import { navLinks } from '../constants'
+import Magnetic from './Magnetic'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -60,12 +61,14 @@ export default function Navbar() {
 
           {/* CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <Link
-              to="/contact"
-              className="btn-neon text-xs rounded"
-            >
-              Hire Me
-            </Link>
+            <Magnetic strength={0.25}>
+              <Link
+                to="/contact"
+                className="btn-neon text-xs rounded"
+              >
+                Hire Me
+              </Link>
+            </Magnetic>
           </div>
 
           {/* Mobile Menu Toggle */}

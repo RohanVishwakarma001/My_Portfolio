@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowDown, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { socialLinks } from "../constants";
+import Magnetic from "./Magnetic";
+import TechIcon from "./TechIcon";
 
 const titles = [
   "Full Stack Developer",
@@ -47,8 +49,11 @@ function AnimatedTitle() {
 
 function ParticleField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -67,8 +72,9 @@ function ParticleField() {
       color: string;
     }[] = [];
     const colors = ["#00d9ff", "#b300ff", "#0080ff", "#00ff41"];
+    const particleCount = window.innerWidth < 768 ? 32 : 80;
 
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -81,9 +87,10 @@ function ParticleField() {
     }
 
     let animId: number;
+    let running = true;
 
     function draw() {
-      if (!ctx || !canvas) return;
+      if (!ctx || !canvas || !running) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((p) => {
@@ -127,13 +134,25 @@ function ParticleField() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
+    const handleVisibility = () => {
+      running = !document.hidden;
+      if (running) {
+        animId = requestAnimationFrame(draw);
+      } else {
+        cancelAnimationFrame(animId);
+      }
+    };
     window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, []);
+  }, [prefersReducedMotion]);
+
+  if (prefersReducedMotion) return null;
 
   return (
     <canvas
@@ -193,9 +212,9 @@ export default function Hero() {
       />
 
       {/* Main content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-24 pb-16 flex flex-col lg:flex-row items-center gap-16">
+      <div className="relative z-10 w-full min-w-0 max-w-7xl mx-auto px-6 pt-24 pb-16 flex flex-col lg:flex-row items-center gap-16">
         {/* Text content */}
-        <div className="flex-1 text-center lg:text-left">
+        <div className="w-full min-w-0 lg:w-auto lg:flex-1 text-center lg:text-left">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -209,9 +228,10 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-sans font-extrabold text-5xl lg:text-7xl leading-tight mb-4"
+            className="font-sans font-extrabold text-[clamp(1.35rem,6.6vw,2.75rem)] lg:text-[clamp(2.75rem,calc(7.8125vw_-_36px),4rem)] leading-tight mb-4 break-words"
           >
-            Rohan <span className="gradient-text">Vishwakarma</span>
+            Rohan{" "}
+            <span className="gradient-text whitespace-nowrap">Vishwakarma</span>
           </motion.h1>
 
           <motion.div
@@ -242,33 +262,37 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-12"
           >
-            <Link to="/projects">
-              <button
-                className="group relative flex items-center gap-2 px-7 py-3.5 rounded-lg font-mono text-sm font-semibold overflow-hidden"
-                style={{
-                  background: "linear-gradient(135deg, #00d9ff, #0080ff)",
-                }}
-              >
-                <span className="relative z-10 text-bg-primary">
-                  Explore My Work
-                </span>
-                <ChevronRight
-                  size={16}
-                  className="relative z-10 text-bg-primary group-hover:translate-x-1 transition-transform"
-                />
-                <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
-              </button>
-            </Link>
+            <Magnetic>
+              <Link to="/projects">
+                <button
+                  className="group relative flex items-center gap-2 px-7 py-3.5 rounded-lg font-mono text-sm font-semibold overflow-hidden"
+                  style={{
+                    background: "linear-gradient(135deg, #00d9ff, #0080ff)",
+                  }}
+                >
+                  <span className="relative z-10 text-bg-primary">
+                    Explore My Work
+                  </span>
+                  <ChevronRight
+                    size={16}
+                    className="relative z-10 text-bg-primary group-hover:translate-x-1 transition-transform"
+                  />
+                  <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
+                </button>
+              </Link>
+            </Magnetic>
 
-            <a
-              href="/My_Resume.pdf"
-              download="Rohan_Vishwakarma_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-neon rounded-lg text-sm"
-            >
-              Download Resume
-            </a>
+            <Magnetic>
+              <a
+                href="/My_Resume.pdf"
+                download="Rohan_Vishwakarma_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-neon rounded-lg text-sm"
+              >
+                Download Resume
+              </a>
+            </Magnetic>
           </motion.div>
 
           {/* Social links */}
@@ -338,17 +362,14 @@ export default function Hero() {
                 <div className="ml-4">
                   <span className="text-text-secondary">stack:</span> [
                 </div>
-                <div className="ml-8">
-                  <span className="text-yellow-400">'React'</span>,{" "}
-                  <span className="text-yellow-400">'Next.js'</span>,
-                </div>
-                <div className="ml-8">
-                  <span className="text-yellow-400">'Node.js'</span>,{" "}
-                  <span className="text-yellow-400">'TypeScript'</span>,
-                </div>
-                <div className="ml-8">
-                  <span className="text-yellow-400">'PostgreSQL'</span>
-                </div>
+                {["React", "Next.js", "Node.js", "TypeScript", "PostgreSQL"].map(
+                  (tech) => (
+                    <div key={tech} className="ml-8 flex items-center gap-1.5">
+                      <TechIcon name={tech} size={12} className="text-yellow-400/80" />
+                      <span className="text-yellow-400">'{tech}'</span>,
+                    </div>
+                  ),
+                )}
                 <div className="ml-4">],</div>
                 <div className="ml-4">
                   <span className="text-text-secondary">available:</span>{" "}

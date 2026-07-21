@@ -1,3 +1,6 @@
+import { Code2, LayoutTemplate, Server, CheckSquare, Cloud } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
 export interface Skill {
   name: string;
   level: number;
@@ -5,7 +8,7 @@ export interface Skill {
 
 export interface SkillCategory {
   label: string;
-  icon: string;
+  icon: LucideIcon;
   color: string;
   skills: Skill[];
 }
@@ -13,7 +16,7 @@ export interface SkillCategory {
 export const skillCategories: SkillCategory[] = [
   {
     label: "Languages",
-    icon: "{ }",
+    icon: Code2,
     color: "cyan",
     skills: [
       { name: "JavaScript (ES6+)", level: 90 },
@@ -26,7 +29,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     label: "Frontend & UI",
-    icon: "⬡",
+    icon: LayoutTemplate,
     color: "purple",
     skills: [
       { name: "React.js", level: 90 },
@@ -39,7 +42,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     label: "Backend & DBs",
-    icon: "⊞",
+    icon: Server,
     color: "blue",
     skills: [
       { name: "Node.js", level: 80 },
@@ -52,7 +55,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     label: "Testing & QA",
-    icon: "✓",
+    icon: CheckSquare,
     color: "green",
     skills: [
       { name: "Jest", level: 80 },
@@ -64,7 +67,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     label: "Tools & Cloud",
-    icon: "◈",
+    icon: Cloud,
     color: "cyan",
     skills: [
       { name: "Git / GitHub", level: 88 },

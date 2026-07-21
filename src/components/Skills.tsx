@@ -1,48 +1,65 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { skillCategories, techIcons } from '../constants'
 import type { SkillCategory } from '../constants'
+import { useTilt } from '../hooks/useTilt'
+import { getTechIcon } from '../constants/icons'
+import TechIcon from './TechIcon'
 
-const colorMap: Record<string, { text: string; bar: string; border: string; label: string; glow: string }> = {
+/** Short fallback monogram for skills with no matching brand icon (e.g. "SQL", "Agile / Scrum"). */
+function monogram(name: string) {
+  return name.replace(/[^A-Za-z0-9]/g, '').slice(0, 2).toUpperCase()
+}
+
+const colorMap: Record<string, { text: string; border: string; label: string; glow: string }> = {
   cyan: {
     text: 'text-neon-cyan',
-    bar: 'from-neon-cyan to-neon-blue',
     border: 'border-neon-cyan/20 hover:border-neon-cyan/40',
     label: 'bg-neon-cyan/10 text-neon-cyan border-neon-cyan/20',
     glow: 'shadow-[0_0_20px_rgba(0,217,255,0.15)]',
   },
   purple: {
     text: 'text-neon-purple',
-    bar: 'from-neon-purple to-neon-blue',
     border: 'border-neon-purple/20 hover:border-neon-purple/40',
     label: 'bg-neon-purple/10 text-neon-purple border-neon-purple/20',
     glow: 'shadow-[0_0_20px_rgba(179,0,255,0.15)]',
   },
   blue: {
     text: 'text-neon-blue',
-    bar: 'from-neon-blue to-neon-cyan',
     border: 'border-blue-500/20 hover:border-blue-500/40',
     label: 'bg-blue-500/10 text-neon-blue border-blue-500/20',
     glow: 'shadow-[0_0_20px_rgba(0,128,255,0.15)]',
   },
   green: {
     text: 'text-neon-green',
-    bar: 'from-neon-green to-neon-cyan',
     border: 'border-green-500/20 hover:border-green-500/40',
     label: 'bg-green-500/10 text-neon-green border-green-500/20',
     glow: 'shadow-[0_0_20px_rgba(0,255,65,0.15)]',
   },
 }
 
-function SkillBar({ name, color }: { name: string; level: number; color: string; delay: number }) {
+function SkillChip({ name, color, delay, active }: { name: string; color: string; delay: number; active: boolean }) {
   const c = colorMap[color]
+  const Icon = getTechIcon(name)
 
   return (
-    <div className="group">
-      <span className={`text-sm font-mono transition-colors duration-200 text-text-secondary group-hover:${c.text}`}>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={active ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.4, delay }}
+      className="group flex flex-col items-center justify-center gap-2 text-center py-3.5 px-2 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/10 transition-all duration-200"
+    >
+      {Icon ? (
+        <Icon size={22} className={`${c.text} opacity-90 group-hover:scale-110 transition-transform duration-200`} />
+      ) : (
+        <span className={`flex items-center justify-center w-[22px] h-[22px] rounded-md text-[9px] font-bold font-mono border ${c.border} ${c.text}`}>
+          {monogram(name)}
+        </span>
+      )}
+      <span className="text-[11px] font-mono leading-snug text-text-secondary group-hover:text-white transition-colors duration-200">
         {name}
       </span>
-    </div>
+    </motion.div>
   )
 }
 
@@ -50,6 +67,8 @@ function CategoryCard({ cat, index }: { cat: SkillCategory; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-60px' })
   const c = colorMap[cat.color]
+  const Icon = cat.icon
+  const tilt = useTilt(4)
 
   return (
     <motion.div
@@ -57,25 +76,31 @@ function CategoryCard({ cat, index }: { cat: SkillCategory; index: number }) {
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className={`glass rounded-2xl border ${c.border} p-6 transition-all duration-300 ${isInView ? c.glow : ''}`}
+      className={`group relative glass rounded-2xl border ${c.border} p-6 transition-all duration-300 overflow-hidden ${isInView ? c.glow : ''}`}
+      {...tilt.bind}
     >
+      <motion.div
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{ backgroundImage: tilt.spotlightBackground }}
+      />
+
       {/* Category header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border font-mono text-lg font-bold ${c.label}`}>
-          {cat.icon}
+      <div className="relative flex items-center gap-3 mb-6">
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${c.label}`}>
+          <Icon size={18} />
         </div>
         <h3 className={`font-sans font-bold text-base ${c.text}`}>{cat.label}</h3>
       </div>
 
-      {/* Skill bars */}
-      <div className="space-y-4">
+      {/* Skill chips */}
+      <div className="relative grid grid-cols-3 gap-3">
         {cat.skills.map((skill, i) => (
-          <SkillBar
+          <SkillChip
             key={skill.name}
             name={skill.name}
-            level={skill.level}
             color={cat.color}
-            delay={index * 0.1 + i * 0.08}
+            delay={index * 0.1 + i * 0.06}
+            active={isInView}
           />
         ))}
       </div>
@@ -86,7 +111,7 @@ function CategoryCard({ cat, index }: { cat: SkillCategory; index: number }) {
 export default function Skills() {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
-  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const marqueeTech = [...techIcons, ...techIcons]
 
   return (
     <section ref={ref} className="py-28 px-6 relative overflow-hidden">
@@ -108,30 +133,24 @@ export default function Skills() {
           </p>
         </motion.div>
 
-        {/* Quick tech pills */}
+        {/* Infinite tech marquee */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-3 mb-16"
+          className="mb-16 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
         >
-          {techIcons.map((t, i) => (
-            <motion.button
-              key={t}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: 0.2 + i * 0.05 }}
-              onHoverStart={() => setActiveIndex(i)}
-              onHoverEnd={() => setActiveIndex(null)}
-              className={`px-4 py-2 rounded-full border font-mono text-sm transition-all duration-300 ${
-                activeIndex === i
-                  ? 'border-neon-cyan text-neon-cyan bg-neon-cyan/10 shadow-neon-cyan'
-                  : 'border-white/10 text-text-muted hover:border-neon-cyan/40 hover:text-white'
-              }`}
-            >
-              {t}
-            </motion.button>
-          ))}
+          <div className="marquee-track flex w-max items-center gap-3">
+            {marqueeTech.map((t, i) => (
+              <span
+                key={`${t}-${i}`}
+                className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 text-text-muted font-mono text-sm hover:border-neon-cyan/40 hover:text-white transition-colors duration-300"
+              >
+                <TechIcon name={t} size={15} className="text-neon-cyan" />
+                {t}
+              </span>
+            ))}
+          </div>
         </motion.div>
 
         {/* Skill category cards */}

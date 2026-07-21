@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { projects, accentTokens, slideVariants } from "../constants";
 import type { Project } from "../constants";
+import { useTilt } from "../hooks/useTilt";
+import TechIcon from "../components/TechIcon";
 
 function ProjectDetailCard({
   project,
@@ -20,6 +22,7 @@ function ProjectDetailCard({
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-60px" });
   const accent = accentTokens[project.color];
+  const tilt = useTilt(3);
 
   return (
     <motion.div
@@ -27,8 +30,14 @@ function ProjectDetailCard({
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.12 }}
-      className={`glass rounded-2xl border ${accent.border} overflow-hidden transition-all duration-400 group`}
+      className={`relative glass rounded-2xl border ${accent.border} overflow-hidden transition-all duration-400 group`}
+      {...tilt.bind}
     >
+      <motion.div
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+        style={{ backgroundImage: tilt.spotlightBackground }}
+      />
+
       {/* Gradient header band */}
       <div className={`h-1.5 bg-gradient-to-r ${accent.gradientVivid}`} />
 
@@ -136,13 +145,14 @@ function ProjectDetailCard({
                 {project.tech.map((t) => (
                   <span
                     key={t}
-                    className="px-2.5 py-1 rounded text-xs font-mono border transition-all duration-200"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono border transition-all duration-200"
                     style={{
                       color: accent.hex,
                       borderColor: `${accent.hex}25`,
                       background: `${accent.hex}08`,
                     }}
                   >
+                    <TechIcon name={t} size={12} />
                     {t}
                   </span>
                 ))}
